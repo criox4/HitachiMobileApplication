@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CustomerService } from '../services/customer.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import axios from 'axios';
 
 interface Customer {
@@ -23,11 +23,19 @@ export class AllCustomerComponent implements OnInit {
   customers: Customer[] = [];
   showModal = false;
   selectedCustomer: Customer | null = null;
+  editForm: FormGroup;
 
-  constructor(private customerService: CustomerService) {}
+  constructor(private fb: FormBuilder) {
+    this.editForm = this.fb.group({
+      address: ['', [Validators.required, Validators.maxLength(25)]],
+      city: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
+      pinCode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
+      state: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]]
+    });
+  }
 
   ngOnInit(): void {
-    this.customerService.getAllCustomers()
+    axios.get('http://localhost:8081/api/customers/all')
       .then(response => {
         this.customers = response.data;
       })
@@ -38,6 +46,12 @@ export class AllCustomerComponent implements OnInit {
 
   openEditModal(customer: Customer): void {
     this.selectedCustomer = { ...customer }; // Create a copy of the customer
+    this.editForm.setValue({
+      address: customer.address || '',
+      city: customer.city || '',
+      pinCode: customer.pinCode || '',
+      state: customer.state || ''
+    });
     this.showModal = true;
   }
 
@@ -47,30 +61,28 @@ export class AllCustomerComponent implements OnInit {
   }
 
   updateCustomer(): void {
+    if (this.editForm.invalid) {
+      return;
+    }
+
     if (this.selectedCustomer) {
-      axios.put(`http://localhost:8081/api/customers/address-update/id/${this.selectedCustomer.id}`, {
-        address: this.selectedCustomer.address,
-        city: this.selectedCustomer.city,
-        pinCode: this.selectedCustomer.pinCode,
-        state: this.selectedCustomer.state
-      })
-      .then(response => {
-        // Update the customer in the local list
-        const index = this.customers.findIndex(c => c.id === this.selectedCustomer?.id);
-        if (index !== -1 && this.selectedCustomer) {
-          this.customers[index] = { 
-            ...this.customers[index],
-            address: this.selectedCustomer.address,
-            city: this.selectedCustomer.city,
-            pinCode: this.selectedCustomer.pinCode,
-            state: this.selectedCustomer.state
-          };
-        }
-        this.closeModal();
-      })
-      .catch(error => {
-        console.error('There was an error updating the customer!', error);
-      });
+      const updatedCustomer = {
+        ...this.selectedCustomer,
+        ...this.editForm.value
+      };
+
+      axios.put(`http://localhost:8081/api/customers/address-update/id/${this.selectedCustomer.id}`, updatedCustomer)
+        .then(response => {
+          // Update the customer in the local list
+          const index = this.customers.findIndex(c => c.id === this.selectedCustomer?.id);
+          if (index !== -1) {
+            this.customers[index] = updatedCustomer;
+          }
+          this.closeModal();
+        })
+        .catch(error => {
+          console.error('There was an error updating the customer!', error);
+        });
     }
   }
 }

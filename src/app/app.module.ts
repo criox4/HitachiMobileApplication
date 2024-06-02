@@ -10,7 +10,7 @@ import { ValidateCustomerComponent } from './validate-customer/validate-customer
 import { ValidateCustomerDetailsComponent } from './validate-customer-details/validate-customer-details.component';
 import { ValidateIdProofComponent } from './validate-id-proof/validate-id-proof.component';
 import { SpecialOffersComponent } from './special-offers/special-offers.component';
-
+import { ReactiveFormsModule } from '@angular/forms'; 
 import { CustomerService } from './services/customer.service';
 
 @NgModule({
@@ -26,7 +26,8 @@ import { CustomerService } from './services/customer.service';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule // Add this module
+    ReactiveFormsModule,  
+    FormsModule 
   ],
   providers: [
     provideClientHydration(),
