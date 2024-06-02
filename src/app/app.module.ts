@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms'; // Add this import
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -9,6 +10,8 @@ import { ValidateCustomerComponent } from './validate-customer/validate-customer
 import { ValidateCustomerDetailsComponent } from './validate-customer-details/validate-customer-details.component';
 import { ValidateIdProofComponent } from './validate-id-proof/validate-id-proof.component';
 import { SpecialOffersComponent } from './special-offers/special-offers.component';
+
+import { CustomerService } from './services/customer.service';
 
 @NgModule({
   declarations: [
@@ -22,10 +25,12 @@ import { SpecialOffersComponent } from './special-offers/special-offers.componen
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule // Add this module
   ],
   providers: [
-    provideClientHydration()
+    provideClientHydration(),
+    CustomerService
   ],
   bootstrap: [AppComponent]
 })
