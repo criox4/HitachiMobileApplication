@@ -5,7 +5,7 @@ import axios from 'axios';
     providedIn: 'root'
 })
 export class CustomerService {
-    private apiUrl = 'http://localhost:9191/api/customers/all';
+    private apiUrl = 'http://localhost:8081/api/customers/all';
 
     constructor() { }
 

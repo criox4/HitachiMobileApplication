@@ -48,7 +48,7 @@ export class AllCustomerComponent implements OnInit {
 
   updateCustomer(): void {
     if (this.selectedCustomer) {
-      axios.put(`http://localhost:9191/api/customers/address-update/id/${this.selectedCustomer.id}`, {
+      axios.put(`http://localhost:8081/api/customers/address-update/id/${this.selectedCustomer.id}`, {
         address: this.selectedCustomer.address,
         city: this.selectedCustomer.city,
         pinCode: this.selectedCustomer.pinCode,
