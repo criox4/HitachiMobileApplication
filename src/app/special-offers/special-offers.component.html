@@ -1,1 +1,33 @@
-<p>special-offers works!</p>
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md -mt-80">
+        <h2 class="text-2xl mb-6 text-center">Show Special Offers</h2>
+        <div class="mb-4">
+            <label class="block text-gray-700 mb-2">SIM Number</label>
+            <input type="text" [(ngModel)]="simNumber" name="simNumber"
+                class="w-full p-2 border border-gray-300 rounded">
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 mb-2">Service Number</label>
+            <input type="text" [(ngModel)]="serviceNumber" name="serviceNumber"
+                class="w-full p-2 border border-gray-300 rounded">
+        </div>
+        <button (click)="validateSim()" class="bg-[rgb(230,80,0)] text-white px-4 py-2 rounded w-full">Validate</button>
+        <div *ngIf="alertMessage" [ngClass]="alertClass" class="mt-4 p-4 rounded flex justify-between items-center">
+            {{ alertMessage }}
+            <button (click)="closeAlert()" class="text-white ml-4">&times;</button>
+        </div>
+    </div>
+
+    <div *ngIf="offers.length > 0" class="mt-10 w-full max-w-4xl px-8">
+        <h2 class="text-2xl mb-6 text-center">Special Offers</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div *ngFor="let offer of offers" class="bg-white p-6 rounded shadow-md text-center">
+                <h3 class="text-lg font-bold mb-2">{{ offer.offerName }}</h3>
+                <p class="mb-2"><strong>Call Quantity:</strong> {{ offer.callQuantity }}</p>
+                <p class="mb-2"><strong>Cost:</strong> ₹{{ offer.cost }}</p>
+                <p class="mb-2"><strong>Data Quantity:</strong> {{ offer.dataQuantity }} GB</p>
+                <p class="mb-2"><strong>Duration:</strong> {{ offer.duration }} days</p>
+            </div>
+        </div>
+    </div>
+</div>

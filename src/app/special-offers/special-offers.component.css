@@ -1,0 +1,6 @@
+/* Add any custom styles for the component here */
+
+input.ng-invalid.ng-touched {
+    border-color: red;
+  }
+  
